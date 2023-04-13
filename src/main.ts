@@ -14,6 +14,8 @@ const enchimentoDoBloco = 10
 const parteSuperiorDoBloco = 60
 const lateralEsquerdaDoBloco = 10
 
+var numDeBlocosNaTela = contagemDeBlocosEmColuna * contagemDeBlocosEmLinha
+
 canvas.width =
   (larguraDoBloco + enchimentoDoBloco) * contagemDeBlocosEmLinha +
   lateralEsquerdaDoBloco
@@ -61,30 +63,6 @@ document.onmousemove = (e) => {
   }
 }
 
-function detectaColisao() {
-  for (let c = 0; c < contagemDeBlocosEmColuna; c++) {
-    for (let l = 0; l < contagemDeBlocosEmLinha; l++) {
-      const bloco = blocos[c][l]
-
-      if (bloco.estado === 1) {
-        if (
-          x > bloco.x &&
-          x < bloco.x + larguraDoBloco &&
-          y > bloco.y &&
-          y < bloco.y + alturaDoBloco + alturaDoBloco / 2
-        ) {
-          dy = -dy
-          bloco.estado = 0
-          pontos++
-
-          if (pontos == contagemDeBlocosEmLinha * contagemDeBlocosEmColuna) {
-            alert('Você ganhou, parabéns')
-          }
-        }
-      }
-    }
-  }
-}
 
 function desenhaBola() {
   context.beginPath()
@@ -183,6 +161,43 @@ function desenha() {
   x += dx
   y += dy
   requestAnimationFrame(desenha)
+}
+
+function detectaColisao() {
+  for (let c = 0; c < contagemDeBlocosEmColuna; c++) {
+    for (let l = 0; l < contagemDeBlocosEmLinha; l++) {
+      const bloco = blocos[c][l]
+
+      if (bloco.estado === 1) {
+        if (
+          x > bloco.x &&
+          x < bloco.x + larguraDoBloco &&
+          y > bloco.y &&
+          y < bloco.y + alturaDoBloco + alturaDoBloco / 2
+        ) {
+          dy = -dy
+          bloco.estado = 0
+          pontos++
+          numDeBlocosNaTela--;
+          if (numDeBlocosNaTela === 0) {
+            numDeBlocosNaTela = contagemDeBlocosEmColuna * contagemDeBlocosEmLinha
+            reiniciaBlocos()
+          }
+        }
+      }
+    }
+  }
+}
+
+function reiniciaBlocos(){
+  for (let c = 0; c < contagemDeBlocosEmColuna; c++) {
+    for (let l = 0; l < contagemDeBlocosEmLinha; l++) {
+      const bloco = blocos[c][l]
+
+      bloco.estado = 1
+    }
+  }
+  desenha()// faz com que o jogo fique cada vez mais rapido
 }
 
 document.body.appendChild(canvas)
