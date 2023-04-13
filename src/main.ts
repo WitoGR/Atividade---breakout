@@ -6,8 +6,8 @@ const context = canvas.getContext('2d')
 const raioDaBola = 10
 const alturaDaRaquete = 10
 const larguraDaRaquete = 75
-const contagemDeBlocosEmLinha = 6
-const contagemDeBlocosEmColuna = 3
+const contagemDeBlocosEmLinha = 4
+const contagemDeBlocosEmColuna = 2
 const larguraDoBloco = 75
 const alturaDoBloco = 20
 const enchimentoDoBloco = 10
@@ -181,7 +181,7 @@ function detectaColisao() {
           numDeBlocosNaTela--;
           if (numDeBlocosNaTela === 0) {
             numDeBlocosNaTela = contagemDeBlocosEmColuna * contagemDeBlocosEmLinha
-            reiniciaBlocos()
+            trocaFase()
           }
         }
       }
@@ -189,7 +189,7 @@ function detectaColisao() {
   }
 }
 
-function reiniciaBlocos(){
+function trocaFase(){
   for (let c = 0; c < contagemDeBlocosEmColuna; c++) {
     for (let l = 0; l < contagemDeBlocosEmLinha; l++) {
       const bloco = blocos[c][l]
@@ -197,7 +197,7 @@ function reiniciaBlocos(){
       bloco.estado = 1
     }
   }
-  desenha()// faz com que o jogo fique cada vez mais rapido
+  dy = dy * 2.2
 }
 
 document.body.appendChild(canvas)
